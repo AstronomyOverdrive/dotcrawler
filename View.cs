@@ -15,7 +15,8 @@ namespace dotcrawler
             int grid = map.GetGrid();
 
             List<int> viewList = [];
-            for (int i = 1; i <= viewDist; i++) // For each level of depth get blocks within a 3 block FOV
+            // Get blocks for each depth of viewDist + players current position
+            for (int i = 0; i < viewDist + 1; i++)
             {
                 if (direction == "West")
                 {
@@ -41,17 +42,49 @@ namespace dotcrawler
                     viewList.Add(layout[pos + (grid * i)]);
                     viewList.Add(layout[(pos + (grid * i)) - 1]);
                 }
-                // Stop early if player is facing a door or wall
-                if (viewList.Count() == 3 && viewList[1] > 0 && viewList[1] < 7)
+                // Stop early if player is facing a wall(1) or door(2 or 3)
+                if (viewList.Count() == 6 && viewList[4] > 0 && viewList[4] < 4)
                 {
                     i = viewDist;
                 }
-                else if (viewList.Count() == 6 && viewList[4] > 0 && viewList[4] < 7)
+                else if (viewList.Count() == 9 && viewList[7] > 0 && viewList[7] < 4)
                 {
                     i = viewDist;
                 }
             }
-            // Draw to screen
+            DrawView(viewList);
+        }
+
+        // Draw view from items in a list
+        private void DrawView(List<int> view)
+        {
+            for (int i = view.Count() - 1; i > 1; i -= 3) // 3 is the FOV
+            {
+                // Position furthest from the player
+                bool frontTexture = false;
+                if (i == view.Count() - 1)
+                {
+                    frontTexture = true;
+                }
+                // Only show 2 rows of players current position, otherwise show entire texture
+                int drawRows;
+                if (i < 3)
+                {
+                    drawRows = 2;
+                }
+                else
+                {
+                    drawRows = textures.CountRows();
+                }
+                // Draw textures from top to bottom
+                for (int j = 0; j < drawRows; j++)
+                {
+                    Console.Write(textures.GetTexture(view[i - 2], frontTexture)[j]);
+                    Console.Write(textures.GetTexture(view[i - 1], frontTexture)[j]);
+                    Console.Write(textures.GetTexture(view[i], frontTexture)[j]);
+                    Console.Write("\n");
+                }
+            }
         }
     }
 }
