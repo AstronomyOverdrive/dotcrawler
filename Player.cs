@@ -3,25 +3,22 @@ namespace dotcrawler
     public class Player
     {
         // Player information
-        private int x = 1;
-        private int y = 1;
+        private int pos = 10;
         private int hp = 5;
         private string[] directions = ["West", "North", "East", "South"];
         private int dirIndex = 0; // Changing an integer is both easier and require less memory than rotating array items
 
         // Player position
-        public void SetPos(int newX, int newY, Map map)
+        public void SetPos(int newPos, Map map)
         {
-            int tryPos = newX * map.GetGrid() + newY;
-            if (map.GetLayout()[tryPos] == 0)
+            if (map.GetLayout()[newPos] == 0) // Collision check
             {
-                x = newX;
-                y = newY;
+                pos = newPos;
             }
         }
-        public int[] GetPos()
+        public int GetPos()
         {
-            return [x, y];
+            return pos;
         }
 
         // Player health points

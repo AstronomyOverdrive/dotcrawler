@@ -2,6 +2,7 @@ namespace dotcrawler
 {
     public class Map
     {
+        // Map information
         private int[] layout = [];
         private int grid = 0;
 
@@ -10,17 +11,9 @@ namespace dotcrawler
         {
             grid = size;
             layout = newLayout;
-            // For debugging
-            for (int i = 0; i < grid * grid; i++)
-            {
-                Console.Write($"{layout[i]} ");
-                if ((i + 1) % grid == 0)
-                {
-                    Console.Write("\n");
-                }
-            }
         }
 
+        // Get map information
         public int GetGrid()
         {
             return grid;
