@@ -1,10 +1,19 @@
 namespace dotcrawler
 {
-    // All "textures" used for the first person view
-    // Each array represents one square on the map grid
     public class Textures
     {
-        public string[] wallFront = [
+        private int textureRows = 6;
+        // All "textures" used for the first person view
+        // Each array represents one square on the map grid
+        private string[] air = [
+            @"            ",
+            @"            ",
+            @"            ",
+            @"            ",
+            @"            ",
+            @"            "
+        ];
+        private string[] wallFront = [
             @"------------",
             @"|_|___|____|",
             @"|___|___|__|",
@@ -12,7 +21,7 @@ namespace dotcrawler
             @"|___|___|__|",
             @"------------"
         ];
-        public string[] wallSide = [
+        private string[] wallSide = [
             @"------------",
             @"|---|   |--|",
             @"|   |---|  |",
@@ -20,7 +29,7 @@ namespace dotcrawler
             @"|   |---|  |",
             @"------------"
         ];
-        public string[] doorFront = [
+        private string[] doorFront = [
             @"------------",
             @"|          |",
             @"|==========|",
@@ -28,7 +37,7 @@ namespace dotcrawler
             @"|==========|",
             @"-          -"
         ];
-        public string[] doorSide = [
+        private string[] doorSide = [
             @"------------",
             @"|  ||  ||  |",
             @"|  ||()||  |",
@@ -36,7 +45,7 @@ namespace dotcrawler
             @"|  ||  ||  |",
             @"------------"
         ];
-        public string[] exitFront = [
+        private string[] exitFront = [
             @"------------",
             @"|          |",
             @"|=E=X=I=T==|",
@@ -44,7 +53,7 @@ namespace dotcrawler
             @"|=E=X=I=T==|",
             @"-          -"
         ];
-        public string[] exitSide = [
+        private string[] exitSide = [
             @"------------",
             @"|   E  E   |",
             @"|   X()X   |",
@@ -52,7 +61,7 @@ namespace dotcrawler
             @"|   T  T   |",
             @"------------"
         ];
-        public string[] enemy = [
+        private string[] enemy = [
             @"            ",
             @"     ()     ",
             @"    /[]\    ",
@@ -60,7 +69,7 @@ namespace dotcrawler
             @"    /  \    ",
             @"            "
         ];
-        public string[] chestClosed = [
+        private string[] chestClosed = [
             @"            ",
             @"            ",
             @"    ____    ",
@@ -68,7 +77,7 @@ namespace dotcrawler
             @"   |====|   ",
             @"            "
         ];
-        public string[] chestOpen = [
+        private string[] chestOpen = [
             @"            ",
             @"    ____    ",
             @"   /    \   ",
@@ -76,5 +85,65 @@ namespace dotcrawler
             @"   |====|   ",
             @"            "
         ];
+
+        // Get how many rows the textures use
+        public int CountRows()
+        {
+            return textureRows;
+        }
+        // Get texture from integer
+        public string[] GetTexture(int id, bool frontTexture)
+        {
+            string[] texture;
+            switch (id)
+            {
+                case 0:
+                    texture = air;
+                    break;
+                case 1:
+                    if (frontTexture)
+                    {
+                        texture = wallFront;
+                    }
+                    else
+                    {
+                        texture = wallSide;
+                    }
+                    break;
+                case 2:
+                    if (frontTexture)
+                    {
+                        texture = doorFront;
+                    }
+                    else
+                    {
+                        texture = doorSide;
+                    }
+                    break;
+                case 3:
+                    if (frontTexture)
+                    {
+                        texture = exitFront;
+                    }
+                    else
+                    {
+                        texture = exitSide;
+                    }
+                    break;
+                case 4:
+                    texture = chestClosed;
+                    break;
+                case 5:
+                    texture = chestOpen;
+                    break;
+                case 6:
+                    texture = enemy;
+                    break;
+                default:
+                    texture = air;
+                    break;
+            }
+            return texture;
+        }
     }
 }
