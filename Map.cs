@@ -2,10 +2,10 @@ namespace dotcrawler
 {
     public class Map
     {
-        private int[]? layout;
-        private int? grid;
+        private int[] layout = [];
+        private int grid = 0;
 
-		// Setup map layout and gridsize
+        // Setup map layout and gridsize
         public void SetMap(int size, int[] newLayout)
         {
             grid = size;
@@ -19,6 +19,15 @@ namespace dotcrawler
                     Console.Write("\n");
                 }
             }
+        }
+
+        public int GetGrid()
+        {
+            return grid;
+        }
+        public int[] GetLayout()
+        {
+            return layout;
         }
     }
 }
