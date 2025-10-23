@@ -19,61 +19,68 @@ namespace dotcrawler
         {
             Console.Clear();
             Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
+			RunGame();
+        }
+
+        static void RunGame()
+        {
+            // Setup game
             Map map = new Map();
             map.SetMap(9,
                 [
-                    0, 1, 1, 1, 1, 1, 1, 1, 0,
+                    1, 1, 1, 1, 1, 1, 1, 1, 1,
                     1, 4, 0, 0, 0, 0, 0, 1, 1,
                     1, 1, 0, 1, 5, 1, 0, 1, 1,
                     1, 1, 6, 1, 1, 1, 0, 0, 1,
-                    1, 1, 0, 0, 0, 1, 1, 0, 1,
+                    1, 1, 0, 0, 0, 1, 1, 2, 1,
                     1, 1, 1, 1, 1, 1, 1, 0, 1,
                     1, 0, 0, 0, 0, 0, 0, 6, 1,
                     1, 0, 0, 0, 0, 0, 1, 1, 1,
-                    0, 1, 1, 1, 1, 1, 1, 1, 0,
+                    1, 1, 1, 1, 1, 1, 1, 1, 1,
                 ]
             );
-
             Player player = new Player();
             Textures textures = new Textures();
             Enemies enemies = new Enemies();
             enemies.AttachAI(map);
 
+            // Main game loop
             while (true)
             {
+                // Draw to screen
                 Console.Clear();
                 Console.WriteLine($"HP: {player.GetHp()} - Gold: 0");
                 View view = new View();
-
                 view.GetView(player.GetPos(), player.GetDir(), map);
 
-                int moveForwards = player.GetPos();
-                int moveBackwards = player.GetPos();
+                // Get position infront and behind player
+                int infrontPlayer = player.GetPos();
+                int behindPlayer = player.GetPos();
                 if (player.GetDir() == "East")
                 {
-                    moveForwards = player.GetPos() + 1;
-                    moveBackwards = player.GetPos() - 1;
+                    infrontPlayer = player.GetPos() + 1;
+                    behindPlayer = player.GetPos() - 1;
                 }
                 else if (player.GetDir() == "North")
                 {
-                    moveForwards = player.GetPos() - map.GetGrid();
-                    moveBackwards = player.GetPos() + map.GetGrid();
+                    infrontPlayer = player.GetPos() - map.GetGrid();
+                    behindPlayer = player.GetPos() + map.GetGrid();
                 }
                 else if (player.GetDir() == "South")
                 {
-                    moveForwards = player.GetPos() + map.GetGrid();
-                    moveBackwards = player.GetPos() - map.GetGrid();
+                    infrontPlayer = player.GetPos() + map.GetGrid();
+                    behindPlayer = player.GetPos() - map.GetGrid();
                 }
                 else if (player.GetDir() == "West")
                 {
-                    moveForwards = player.GetPos() - 1;
-                    moveBackwards = player.GetPos() + 1;
+                    infrontPlayer = player.GetPos() - 1;
+                    behindPlayer = player.GetPos() + 1;
                 }
-
+                // Handle player input
                 string option = Console.ReadKey().Key.ToString();
                 if (option == "W")
                 {
-                    player.SetPos(moveForwards, map);
+                    player.SetPos(infrontPlayer, map);
                 }
                 else if (option == "A")
                 {
@@ -81,7 +88,7 @@ namespace dotcrawler
                 }
                 else if (option == "S")
                 {
-                    player.SetPos(moveBackwards, map);
+                    player.SetPos(behindPlayer, map);
                 }
                 else if (option == "D")
                 {
@@ -89,14 +96,33 @@ namespace dotcrawler
                 }
                 else if (option == "E")
                 {
-                    if (map.GetLayout()[moveForwards] == 6)
-                    {
-                        enemies.AttackEnemy(moveForwards, player, map);
-                    }
+                    Interact(infrontPlayer, map, enemies, player);
                 }
+                // Let enemies have their turn
                 enemies.RunLogic(map, player);
             }
+        }
 
+        static void Interact(int index, Map map, Enemies enemies, Player player)
+        {
+            int block = map.GetLayout()[index];
+            if (block == 6) // Enemy
+            {
+                enemies.AttackEnemy(index, player, map);
+            }
+            else if (block == 4) // Chest
+            {
+                map.UpdateLayout(index, 5); // Change texture to open chest
+				// TODO: give player with gold
+            }
+            else if (block == 2) // Door
+            {
+                map.UpdateLayout(index, 0); // "Open" door by replacing it with air
+            }
+            else if (block == 3) // Exit
+            {
+                // TODO
+            }
         }
     }
 }
