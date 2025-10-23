@@ -13,6 +13,12 @@ namespace dotcrawler
             layout = newLayout;
         }
 
+        // Update a block on map layout
+        public void UpdateLayout(int index, int block)
+        {
+            layout[index] = block;
+        }
+
         // Get map information
         public int GetGrid()
         {
