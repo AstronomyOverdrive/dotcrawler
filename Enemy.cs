@@ -5,16 +5,28 @@ namespace dotcrawler
         private int pos = 0;
         private int hp = 3;
 
+        // Set starting position
+        public void StartPos(int position)
+        {
+            pos = position;
+        }
+
+        // Get enemy pos
+        public int GetPos()
+        {
+            return pos;
+        }
+
         // Damage health points
-        public void Damage(int amount, Map map)
+        public int Damage(int amount, Map map)
         {
             hp -= amount;
             // Check if dead, if so then clean up self
             if (hp <= 0)
             {
                 map.UpdateLayout(pos, 0);
-                // TODO: remove from list
             }
+            return hp;
         }
 
         // Take action
@@ -32,13 +44,13 @@ namespace dotcrawler
             }
             else
             { // Move position
-                int oldPos = pos;
                 int newPos = blocksAround[dieRoll.Next(4)];
                 // Check if chosen position is clear
                 if (map.GetLayout()[newPos] == 0)
                 {
+                    map.UpdateLayout(pos, 0);
                     map.UpdateLayout(newPos, 6);
-                    map.UpdateLayout(oldPos, 0);
+                    pos = newPos;
                 }
             }
         }
