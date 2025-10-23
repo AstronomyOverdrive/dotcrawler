@@ -3,8 +3,9 @@ namespace dotcrawler
     public class Player
     {
         // Player information
-        private int pos = 10;
+        private int pos = 40;
         private int hp = 5;
+        private int dmg = 1;
         private string[] directions = ["West", "North", "East", "South"];
         private int dirIndex = 0; // Changing an integer is both easier and require less memory than rotating array items
 
@@ -29,6 +30,16 @@ namespace dotcrawler
         public int GetHp()
         {
             return hp;
+        }
+
+        // Player damage output
+        public void UpdateDamage(int newDmg)
+        {
+            dmg = newDmg;
+        }
+        public int GetDamage()
+        {
+            return dmg;
         }
 
         // Player rotation

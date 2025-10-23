@@ -28,17 +28,24 @@ namespace dotcrawler
         }
 
         // Player attack enemy
-        public void AttackEnemy(int pos, int damage, Map map)
+        public void AttackEnemy(int pos, Player player, Map map)
         {
+            List<Enemy> toRemove = [];
             foreach (Enemy enemy in enemyList)
             {
                 if (enemy.GetPos() == pos) // Found enemy
                 {
-                    if (enemy.Damage(damage, map) <= 0) // Check if enemy is dead
+                    if (enemy.Damage(player.GetDamage(), map) <= 0) // Check if enemy is dead
                     {
-                        enemyList.Remove(enemy);
+                        toRemove.Add(enemy);
                     }
                 }
+            }
+            foreach (Enemy enemy in toRemove)
+            {
+                enemyList.Remove(enemy);
+                // Reward player
+                player.UpdateHp(player.GetHp() + 2);
             }
         }
     }
