@@ -5,6 +5,7 @@ namespace dotcrawler
         // Player information
         private int pos = 40;
         private int hp = 5;
+        private int gold = 0;
         private int dmg = 1;
         private string[] directions = ["West", "North", "East", "South"];
         private int dirIndex = 0; // Changing an integer is both easier and require less memory than rotating array items
@@ -30,6 +31,16 @@ namespace dotcrawler
         public int GetHp()
         {
             return hp;
+        }
+
+        // Player gold
+        public void SetGold(int newGold)
+        {
+            gold = newGold;
+        }
+        public int GetGold()
+        {
+            return gold;
         }
 
         // Player damage output

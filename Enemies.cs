@@ -46,6 +46,7 @@ namespace dotcrawler
                 enemyList.Remove(enemy);
                 // Reward player
                 player.UpdateHp(player.GetHp() + 2);
+                player.SetGold(player.GetGold() + 20);
             }
         }
     }

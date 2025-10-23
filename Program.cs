@@ -14,12 +14,14 @@ namespace dotcrawler
 {
     class Program
     {
+        static bool exitGame = false; // Used for game loop
+
         // Main function
         static void Main()
         {
             Console.Clear();
             Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
-			RunGame();
+            RunGame();
         }
 
         static void RunGame()
@@ -35,7 +37,7 @@ namespace dotcrawler
                     1, 1, 0, 0, 0, 1, 1, 2, 1,
                     1, 1, 1, 1, 1, 1, 1, 0, 1,
                     1, 0, 0, 0, 0, 0, 0, 6, 1,
-                    1, 0, 0, 0, 0, 0, 1, 1, 1,
+                    3, 0, 0, 0, 0, 0, 1, 1, 1,
                     1, 1, 1, 1, 1, 1, 1, 1, 1,
                 ]
             );
@@ -45,11 +47,12 @@ namespace dotcrawler
             enemies.AttachAI(map);
 
             // Main game loop
-            while (true)
+            exitGame = false;
+            while (!exitGame)
             {
                 // Draw to screen
                 Console.Clear();
-                Console.WriteLine($"HP: {player.GetHp()} - Gold: 0");
+                Console.WriteLine($"HP: {player.GetHp()} - Gold: {player.GetGold()}");
                 View view = new View();
                 view.GetView(player.GetPos(), player.GetDir(), map);
 
@@ -100,6 +103,11 @@ namespace dotcrawler
                 }
                 // Let enemies have their turn
                 enemies.RunLogic(map, player);
+                // Check if player is still alive
+                if (player.GetHp() <= 0)
+                {
+                    exitGame = true;
+                }
             }
         }
 
@@ -113,7 +121,7 @@ namespace dotcrawler
             else if (block == 4) // Chest
             {
                 map.UpdateLayout(index, 5); // Change texture to open chest
-				// TODO: give player with gold
+                player.SetGold(player.GetGold() + 100);
             }
             else if (block == 2) // Door
             {
@@ -121,7 +129,8 @@ namespace dotcrawler
             }
             else if (block == 3) // Exit
             {
-                // TODO
+                exitGame = true;
+                // Save player gold
             }
         }
     }
