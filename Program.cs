@@ -19,14 +19,54 @@ namespace dotcrawler
         // Main function
         static void Main()
         {
-            Console.Clear();
-            Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
-            MapHandler maphandler = new MapHandler();
-            maphandler.ListMaps();
-            MapInfo loadMap = maphandler.GetMap(0);
-            if (!String.IsNullOrEmpty(loadMap.name))
+            bool quit = false;
+            string errorMsg = "";
+            while (!quit)
             {
-                RunGame(loadMap);
+                Console.Clear();
+                Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
+                // Error message
+                if (errorMsg != "")
+                {
+                    Console.WriteLine($"Error: {errorMsg}");
+                    errorMsg = "";
+                }
+                // Menu
+                Console.Write("\nPress \"E\" to enter the dungeon or \"Q\" to quit: ");
+                string option = Console.ReadKey().Key.ToString();
+                Console.WriteLine("\n");
+                if (option == "Q") // Quit
+                {
+                    quit = true;
+                }
+                else if (option == "E") // Enter dungeon
+                {
+                    MapHandler maphandler = new MapHandler();
+                    maphandler.ListMaps();
+                    int id;
+                    Console.Write("\nSelect dungeon (id): ");
+                    string? dungeon = Console.ReadLine();
+                    if (!String.IsNullOrEmpty(dungeon) && int.TryParse(dungeon, out id))
+                    {
+                        MapInfo loadMap = maphandler.GetMap(id);
+                        if (!String.IsNullOrEmpty(loadMap.name))
+                        {
+                            RunGame(loadMap);
+                        }
+                        else
+                        {
+                            errorMsg = "Invalid dungeon";
+                        }
+                    }
+                    else
+                    {
+                        errorMsg = "Invalid dungeon";
+                    }
+                }
+                else
+                {
+                    errorMsg = "Invalid option";
+                }
             }
         }
 
