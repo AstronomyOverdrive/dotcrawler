@@ -77,8 +77,10 @@ namespace dotcrawler
             Player player = new Player();
             Textures textures = new Textures();
             Enemies enemies = new Enemies();
+            SaveHandler saveHandler = new SaveHandler();
             map.SetMap((int)loadMap.grid, loadMap.layout);
             player.SetPos((int)loadMap.spawn, map);
+            player.SetGold(saveHandler.LoadGold());
             enemies.AttachAI(map);
 
             // Main game loop
@@ -87,7 +89,7 @@ namespace dotcrawler
             {
                 // Draw to screen
                 Console.Clear();
-                Console.WriteLine($"HP: {player.GetHp()} - Gold: {player.GetGold()}");
+                Console.WriteLine($"HP: {player.GetHp()} - Gold: {player.GetGold()} - Best: {saveHandler.GetBest()}");
                 View view = new View();
                 view.GetView(player.GetPos(), player.GetDir(), map);
 
@@ -141,9 +143,23 @@ namespace dotcrawler
                 // Check if player is still alive
                 if (player.GetHp() <= 0)
                 {
+                    player.SetGold(0);
                     exitGame = true;
                 }
             }
+            // Save gold and highscore after a finished run
+            saveHandler.SaveGold(player.GetGold());
+            // Display message
+            if (player.GetHp() <= 0)
+            {
+                Console.WriteLine("\nYou died!");
+            }
+            else
+            {
+                Console.WriteLine($"\nRun finished with {player.GetGold()} gold!");
+            }
+            Console.WriteLine("Press any key to return to the menu.");
+            Console.ReadKey();
         }
 
         static void Interact(int index, Map map, Enemies enemies, Player player)
@@ -165,7 +181,6 @@ namespace dotcrawler
             else if (block == "exit") // Exit
             {
                 exitGame = true;
-                // Save player gold
             }
         }
     }
