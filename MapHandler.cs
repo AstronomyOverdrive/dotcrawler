@@ -10,6 +10,7 @@ namespace dotcrawler
         // List with all available maps
         private List<MapInfo> maps = [];
 
+        // List all available maps
         public void ListMaps()
         {
             if (File.Exists(jsonFile))
@@ -27,6 +28,19 @@ namespace dotcrawler
             else
             {
                 Console.WriteLine("Couldn't find maps.json!");
+            }
+        }
+
+        // Get selected map
+        public MapInfo GetMap(int id)
+        {
+            if (maps.Count() > 0 && id >= 0 && id < maps.Count())
+            {
+                return maps[id];
+            }
+            else
+            {
+                return new MapInfo();
             }
         }
     }

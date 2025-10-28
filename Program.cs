@@ -21,29 +21,24 @@ namespace dotcrawler
         {
             Console.Clear();
             Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
-            RunGame();
+            MapHandler maphandler = new MapHandler();
+            maphandler.ListMaps();
+            MapInfo loadMap = maphandler.GetMap(0);
+            if (!String.IsNullOrEmpty(loadMap.name))
+            {
+                RunGame(loadMap);
+            }
         }
 
-        static void RunGame()
+        static void RunGame(MapInfo loadMap)
         {
             // Setup game
             Map map = new Map();
-            map.SetMap(9,
-                [
-                    1, 1, 1, 1, 1, 1, 1, 1, 1,
-                    1, 4, 0, 0, 0, 0, 0, 1, 1,
-                    1, 1, 0, 1, 5, 1, 0, 1, 1,
-                    1, 1, 6, 1, 1, 1, 0, 0, 1,
-                    1, 1, 0, 0, 0, 1, 1, 2, 1,
-                    1, 1, 1, 1, 1, 1, 1, 0, 1,
-                    1, 0, 0, 0, 0, 0, 0, 6, 1,
-                    3, 0, 0, 0, 0, 0, 1, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1, 1,
-                ]
-            );
             Player player = new Player();
             Textures textures = new Textures();
             Enemies enemies = new Enemies();
+            map.SetMap((int)loadMap.grid, loadMap.layout);
+            player.SetPos((int)loadMap.spawn, map);
             enemies.AttachAI(map);
 
             // Main game loop
