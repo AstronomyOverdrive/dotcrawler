@@ -13,7 +13,7 @@ namespace dotcrawler
         // Player position
         public void SetPos(int newPos, Map map)
         {
-            if (map.GetLayout()[newPos] == 0) // Collision check
+            if (map.GetLayout()[newPos] == "air") // Collision check
             {
                 pos = newPos;
             }

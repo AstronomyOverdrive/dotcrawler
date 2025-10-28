@@ -108,21 +108,21 @@ namespace dotcrawler
 
         static void Interact(int index, Map map, Enemies enemies, Player player)
         {
-            int block = map.GetLayout()[index];
-            if (block == 6) // Enemy
+            string block = map.GetLayout()[index];
+            if (block == "enemy") // Enemy
             {
                 enemies.AttackEnemy(index, player, map);
             }
-            else if (block == 4) // Chest
+            else if (block == "chestClosed") // Chest
             {
-                map.UpdateLayout(index, 5); // Change texture to open chest
+                map.UpdateLayout(index, "chestOpen"); // Change texture to open chest
                 player.SetGold(player.GetGold() + 100);
             }
-            else if (block == 2) // Door
+            else if (block == "door") // Door
             {
-                map.UpdateLayout(index, 0); // "Open" door by replacing it with air
+                map.UpdateLayout(index, "air"); // "Open" door by replacing it with air
             }
-            else if (block == 3) // Exit
+            else if (block == "exit") // Exit
             {
                 exitGame = true;
                 // Save player gold

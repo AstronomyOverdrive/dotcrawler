@@ -10,7 +10,7 @@ namespace dotcrawler
 		{
 			get; set;
 		}
-        public int[]? layout
+        public string[]? layout
 		{
 			get; set;
 		}

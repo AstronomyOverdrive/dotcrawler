@@ -3,18 +3,18 @@ namespace dotcrawler
     public class Map
     {
         // Map information
-        private int[] layout = [];
+        private string[] layout = [];
         private int grid = 0;
 
         // Setup map layout and gridsize
-        public void SetMap(int size, int[] newLayout)
+        public void SetMap(int size, string[] newLayout)
         {
             grid = size;
             layout = newLayout;
         }
 
         // Update a block on map layout
-        public void UpdateLayout(int index, int block)
+        public void UpdateLayout(int index, string block)
         {
             layout[index] = block;
         }
@@ -24,7 +24,7 @@ namespace dotcrawler
         {
             return grid;
         }
-        public int[] GetLayout()
+        public string[] GetLayout()
         {
             return layout;
         }

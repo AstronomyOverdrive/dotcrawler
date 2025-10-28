@@ -9,7 +9,7 @@ namespace dotcrawler
         {
             for (int i = 0; i < map.GetGrid() * map.GetGrid(); i++)
             {
-                if (map.GetLayout()[i] == 6) // Check if current block represents an enemy
+                if (map.GetLayout()[i] == "enemy") // Check if current block represents an enemy
                 {
                     Enemy newEnemy = new Enemy();
                     newEnemy.StartPos(i); // Set starting position

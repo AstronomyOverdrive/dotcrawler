@@ -24,7 +24,7 @@ namespace dotcrawler
             // Check if dead, if so then clean up self
             if (hp <= 0)
             {
-                map.UpdateLayout(pos, 0);
+                map.UpdateLayout(pos, "air");
             }
             return hp;
         }
@@ -46,10 +46,10 @@ namespace dotcrawler
             { // Move position
                 int newPos = blocksAround[dieRoll.Next(4)];
                 // Check if chosen position is clear
-                if (map.GetLayout()[newPos] == 0)
+                if (map.GetLayout()[newPos] == "air")
                 {
-                    map.UpdateLayout(pos, 0);
-                    map.UpdateLayout(newPos, 6);
+                    map.UpdateLayout(pos, "air");
+                    map.UpdateLayout(newPos, "enemy");
                     pos = newPos;
                 }
             }

@@ -92,15 +92,15 @@ namespace dotcrawler
             return textureRows;
         }
         // Get texture from integer
-        public string[] GetTexture(int id, bool frontTexture)
+        public string[] GetTexture(string name, bool frontTexture)
         {
             string[] texture;
-            switch (id)
+            switch (name)
             {
-                case 0:
+                case "air":
                     texture = air;
                     break;
-                case 1:
+                case "wall":
                     if (frontTexture)
                     {
                         texture = wallFront;
@@ -110,7 +110,7 @@ namespace dotcrawler
                         texture = wallSide;
                     }
                     break;
-                case 2:
+                case "door":
                     if (frontTexture)
                     {
                         texture = doorFront;
@@ -120,7 +120,7 @@ namespace dotcrawler
                         texture = doorSide;
                     }
                     break;
-                case 3:
+                case "exit":
                     if (frontTexture)
                     {
                         texture = exitFront;
@@ -130,13 +130,13 @@ namespace dotcrawler
                         texture = exitSide;
                     }
                     break;
-                case 4:
+                case "chestClosed":
                     texture = chestClosed;
                     break;
-                case 5:
+                case "chestOpen":
                     texture = chestOpen;
                     break;
-                case 6:
+                case "enemy":
                     texture = enemy;
                     break;
                 default:

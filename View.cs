@@ -11,10 +11,10 @@ namespace dotcrawler
         public void GetView(int pos, string direction, Map map)
         {
             // Needed for calculations
-            int[] layout = map.GetLayout();
+            string[] layout = map.GetLayout();
             int grid = map.GetGrid();
 
-            List<int> viewList = [];
+            List<string> viewList = [];
             // Get blocks for each depth of viewDist + players current position
             for (int i = 0; i < viewDist + 1; i++)
             {
@@ -42,12 +42,12 @@ namespace dotcrawler
                     viewList.Add(layout[pos + (grid * i)]);
                     viewList.Add(layout[(pos + (grid * i)) - 1]);
                 }
-                // Stop early if player is facing a wall(1) or door(2 or 3)
-                if (viewList.Count() == 6 && viewList[4] > 0 && viewList[4] < 4)
+                // Stop early if player is facing a wall or door
+                if (viewList.Count() == 6 && HitWall(viewList[4]))
                 {
                     i = viewDist;
                 }
-                else if (viewList.Count() == 9 && viewList[7] > 0 && viewList[7] < 4)
+                else if (viewList.Count() == 9 && HitWall(viewList[7]))
                 {
                     i = viewDist;
                 }
@@ -55,8 +55,21 @@ namespace dotcrawler
             DrawView(viewList);
         }
 
+        // Check for walls
+        private bool HitWall(string block)
+        {
+            if (block == "wall" || block == "door" || block == "exit")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         // Draw view from items in a list
-        private void DrawView(List<int> view)
+        private void DrawView(List<string> view)
         {
             for (int i = view.Count() - 1; i > 1; i -= 3) // 3 is the FOV
             {
