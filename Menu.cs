@@ -19,7 +19,7 @@ namespace dotcrawler
                     errorMsg = "";
                 }
                 // Menu
-                Console.Write("\nPress \"E\" to enter the dungeon, \"D\" to delete a map or \"Q\" to quit: ");
+                Console.Write("\nChoose option: (E)nter dungeon, (D)elete map, (C)ontrols or (Q)uit:");
                 string option = Console.ReadKey().Key.ToString();
                 Console.WriteLine("\n");
                 if (option == "Q") // Quit
@@ -69,6 +69,12 @@ namespace dotcrawler
                     {
                         errorMsg = "Invalid map";
                     }
+                }
+                else if (option == "C")
+                {
+                    Console.WriteLine("W/S = Move\nA/D = Turn\nE = Interact/Attack\nQ = Quit");
+                    Console.WriteLine("Press enter to return to menu.");
+                    Console.ReadLine();
                 }
                 else
                 {
