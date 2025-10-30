@@ -9,7 +9,7 @@ namespace dotcrawler
         private string IPPort = "http://127.0.0.1:8080";
         // For saving maps
         List<MapInfo> maps = [];
-        string jsonFile = @"maps.json";
+        string jsonFile = @"StoredData/maps.json";
 
         // Start webserver
         public void Start()
@@ -22,7 +22,7 @@ namespace dotcrawler
             app.MapGet("/", (HttpContext context) =>
             {
                 context.Response.Headers["Content-Type"] = "text/html";
-                return File.ReadAllText(@"index.html");
+                return File.ReadAllText(@"Web/index.html");
             });
 
             // Receive map data on route "/save/{data}"

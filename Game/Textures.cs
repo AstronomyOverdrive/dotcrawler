@@ -1,9 +1,9 @@
+// TODO: replace with a better system (if time permits it)
 namespace dotcrawler
 {
     public class Textures
     {
         private int textureRows = 6;
-        // All "textures" used for the first person view
         // Each array represents one square on the map grid
         private string[] air = [
             @"            ",

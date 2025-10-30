@@ -6,7 +6,7 @@ namespace dotcrawler
     public class SaveHandler
     {
         // File with save data
-        private string jsonFile = @"save.json";
+        private string jsonFile = @"StoredData/save.json";
         private int highScore = 0;
 
         // Get highscore

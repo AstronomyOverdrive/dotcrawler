@@ -6,7 +6,7 @@ namespace dotcrawler
     public class MapHandler
     {
         // File containing maps
-        private string jsonFile = @"maps.json";
+        private string jsonFile = @"StoredData/maps.json";
         // List with all available maps
         private List<MapInfo> maps = [];
 
