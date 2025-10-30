@@ -4,6 +4,7 @@ namespace dotcrawler
     {
         private int pos = 0;
         private int hp = 3;
+        private Random dieRoll = new Random();
 
         // Set starting position
         public void StartPos(int position)
@@ -32,7 +33,6 @@ namespace dotcrawler
         // Take action
         public void Action(Player player, Map map)
         {
-            Random dieRoll = new Random();
             int[] blocksAround = [pos + 1, pos - 1, pos + map.GetGrid(), pos - map.GetGrid()];
             // Decide action based on player position
             if (blocksAround[0] == player.GetPos() || blocksAround[1] == player.GetPos() || blocksAround[2] == player.GetPos() || blocksAround[3] == player.GetPos())

@@ -78,6 +78,7 @@ namespace dotcrawler
             Textures textures = new Textures();
             Enemies enemies = new Enemies();
             SaveHandler saveHandler = new SaveHandler();
+            Random dieRoll = new Random();
             map.SetMap((int)loadMap.grid, loadMap.layout);
             player.SetPos((int)loadMap.spawn, map);
             player.SetGold(saveHandler.LoadGold());
@@ -136,7 +137,7 @@ namespace dotcrawler
                 }
                 else if (option == "E")
                 {
-                    Interact(infrontPlayer, map, enemies, player);
+                    Interact(infrontPlayer, map, enemies, player, dieRoll);
                 }
                 // Let enemies have their turn
                 enemies.RunLogic(map, player);
@@ -162,17 +163,20 @@ namespace dotcrawler
             Console.ReadKey();
         }
 
-        static void Interact(int index, Map map, Enemies enemies, Player player)
+        static void Interact(int index, Map map, Enemies enemies, Player player, Random dieRoll)
         {
             string block = map.GetLayout()[index];
             if (block == "enemy") // Enemy
             {
-                enemies.AttackEnemy(index, player, map);
+                if (dieRoll.Next(10) > 1) // Roll for hit chance
+                {
+                    enemies.AttackEnemy(index, player, map);
+                }
             }
             else if (block == "chestClosed") // Chest
             {
                 map.UpdateLayout(index, "chestOpen"); // Change texture to open chest
-                player.SetGold(player.GetGold() + 100);
+                player.SetGold(player.GetGold() + dieRoll.Next(81) + 20);
             }
             else if (block == "door") // Door
             {

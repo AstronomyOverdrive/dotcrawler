@@ -3,6 +3,7 @@ namespace dotcrawler
     public class Enemies
     {
         private List<Enemy> enemyList = [];
+        private Random dieRoll = new Random();
 
         // Attach AI to all enemies on map layout
         public void AttachAI(Map map)
@@ -45,8 +46,8 @@ namespace dotcrawler
             {
                 enemyList.Remove(enemy);
                 // Reward player
-                player.UpdateHp(player.GetHp() + 2);
-                player.SetGold(player.GetGold() + 20);
+                player.UpdateHp(player.GetHp() + dieRoll.Next(3));
+                player.SetGold(player.GetGold() + dieRoll.Next(20) + 1);
             }
         }
     }
