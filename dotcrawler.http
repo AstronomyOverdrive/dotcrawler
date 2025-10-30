@@ -1,0 +1,6 @@
+@dotcrawler_HostAddress = http://localhost:5197
+
+GET {{dotcrawler_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
