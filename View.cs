@@ -7,6 +7,25 @@ namespace dotcrawler
         // Depth to draw
         private int viewDist = 3;
 
+        // Tell player to resize their terminal so game is displayed correctly
+        public void ShowResize()
+        {
+            int drawRows = textures.CountRows();
+            Console.Clear();
+            for (int i = 0; i < viewDist; i++)
+            {
+                for (int j = 0; j < drawRows; j++)
+                {
+                    Console.Write(textures.GetTexture("wall", true)[j]);
+                    Console.Write(textures.GetTexture("wall", true)[j]);
+                    Console.Write(textures.GetTexture("wall", true)[j]);
+                    Console.Write("\n");
+                }
+            }
+            Console.WriteLine("Please resize your terminal until the\nshapes above are displayed in a 3x3 cube.\nPress the enter key to continue.");
+            Console.ReadLine();
+        }
+
         // Prepare list with what the player can see
         public void GetView(int pos, string direction, Map map)
         {

@@ -75,10 +75,11 @@ namespace dotcrawler
             // Setup game
             Map map = new Map();
             Player player = new Player();
-            Textures textures = new Textures();
+            View view = new View();
             Enemies enemies = new Enemies();
             SaveHandler saveHandler = new SaveHandler();
             Random dieRoll = new Random();
+            view.ShowResize();
             map.SetMap((int)loadMap.grid, loadMap.layout);
             player.SetPos((int)loadMap.spawn, map);
             player.SetGold(saveHandler.LoadGold());
@@ -91,7 +92,6 @@ namespace dotcrawler
                 // Draw to screen
                 Console.Clear();
                 Console.WriteLine($"HP: {player.GetHp()} - Gold: {player.GetGold()} - Best: {saveHandler.GetBest()}");
-                View view = new View();
                 view.GetView(player.GetPos(), player.GetDir(), map);
 
                 // Get position infront and behind player
