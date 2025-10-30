@@ -74,6 +74,11 @@ namespace dotcrawler
                 {
                     Interact(infrontPlayer, map, enemies, player, dieRoll);
                 }
+                else if (option == "Q")
+                {
+                    player.SetGold(saveHandler.GetBest());
+                    quit = true;
+                }
                 // Let enemies have their turn
                 enemies.RunLogic(map, player);
                 // Check if player is still alive
