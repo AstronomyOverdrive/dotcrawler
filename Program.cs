@@ -17,41 +17,63 @@ namespace dotcrawler
         static bool exitGame = false; // Used for game loop
 
         // Main function
-        static void Main()
+        static void Main(string[] args)
         {
-            bool quit = false;
-            string errorMsg = "";
-            while (!quit)
+			Console.Clear();
+            bool runServer = false;
+            foreach (string argument in args)
             {
-                Console.Clear();
-                Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
-                // Error message
-                if (errorMsg != "")
+                if (argument == "--server" || argument == "-s")
                 {
-                    Console.WriteLine($"Error: {errorMsg}");
-                    errorMsg = "";
+                    runServer = true;
                 }
-                // Menu
-                Console.Write("\nPress \"E\" to enter the dungeon or \"Q\" to quit: ");
-                string option = Console.ReadKey().Key.ToString();
-                Console.WriteLine("\n");
-                if (option == "Q") // Quit
+				else {
+				Console.WriteLine($"Ignoring unknown option \"{argument}\"...");}
+            }
+            if (runServer)
+            {
+                WebServer server = new WebServer();
+                server.Start();
+            }
+            else
+            {
+                bool quit = false;
+                string errorMsg = "";
+                while (!quit)
                 {
-                    quit = true;
-                }
-                else if (option == "E") // Enter dungeon
-                {
-                    MapHandler maphandler = new MapHandler();
-                    maphandler.ListMaps();
-                    int id;
-                    Console.Write("\nSelect dungeon (id): ");
-                    string? dungeon = Console.ReadLine();
-                    if (!String.IsNullOrEmpty(dungeon) && int.TryParse(dungeon, out id))
+                    Console.WriteLine("dotcrawler\nv25.10a\nWilliam Pettersson\n");
+                    // Error message
+                    if (errorMsg != "")
                     {
-                        MapInfo loadMap = maphandler.GetMap(id);
-                        if (!String.IsNullOrEmpty(loadMap.name))
+                        Console.WriteLine($"Error: {errorMsg}");
+                        errorMsg = "";
+                    }
+                    // Menu
+                    Console.Write("\nPress \"E\" to enter the dungeon or \"Q\" to quit: ");
+                    string option = Console.ReadKey().Key.ToString();
+                    Console.WriteLine("\n");
+                    if (option == "Q") // Quit
+                    {
+                        quit = true;
+                    }
+                    else if (option == "E") // Enter dungeon
+                    {
+                        MapHandler maphandler = new MapHandler();
+                        maphandler.ListMaps();
+                        int id;
+                        Console.Write("\nSelect dungeon (id): ");
+                        string? dungeon = Console.ReadLine();
+                        if (!String.IsNullOrEmpty(dungeon) && int.TryParse(dungeon, out id))
                         {
-                            RunGame(loadMap);
+                            MapInfo loadMap = maphandler.GetMap(id);
+                            if (!String.IsNullOrEmpty(loadMap.name))
+                            {
+                                RunGame(loadMap);
+                            }
+                            else
+                            {
+                                errorMsg = "Invalid dungeon";
+                            }
                         }
                         else
                         {
@@ -60,12 +82,8 @@ namespace dotcrawler
                     }
                     else
                     {
-                        errorMsg = "Invalid dungeon";
+                        errorMsg = "Invalid option";
                     }
-                }
-                else
-                {
-                    errorMsg = "Invalid option";
                 }
             }
         }
