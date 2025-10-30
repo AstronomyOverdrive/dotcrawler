@@ -43,5 +43,21 @@ namespace dotcrawler
                 return new MapInfo();
             }
         }
+
+        // Delete selected map
+        public bool DeleteMap(int id)
+        {
+            if (maps.Count() > 0 && id >= 0 && id < maps.Count())
+            {
+                maps.RemoveAt(id);
+                String writeJSON = JsonSerializer.Serialize(maps);
+                File.WriteAllText(jsonFile, writeJSON);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
