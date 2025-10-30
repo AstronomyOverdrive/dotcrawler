@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Level builder</title>
+	<style>
+		body {
+			margin: 0;
+			font-size: 1.3rem;
+			font-family: sans-serif;
+			color: #cdd6f4;
+			background: #6c7086;
+			position: relative;
+			min-height: 100vh;
+		}
+
+		header,
+		footer {
+			text-align: center;
+			background: #1e1e2e;
+		}
+
+		header {
+			padding: 1rem;
+		}
+
+		footer {
+			position: absolute;
+			height: 3rem;
+			line-height: 3rem;
+			width: 100%;
+			bottom: 0;
+		}
+
+		h1 {
+			margin: 0px;
+		}
+
+		a {
+			color: #89dceb;
+		}
+
+		main {
+			height: auto;
+			padding-bottom: 3rem;
+			text-align: center;
+		}
+
+		#map {
+			aspect-ratio: 1/1;
+			background: #313244;
+			outline: 2px solid black;
+			display: flex;
+			flex-wrap: wrap;
+			margin: auto;
+		}
+
+		.block {
+			min-height: 20px;
+			background: red;
+			outline: 1px solid black;
+			aspect-ratio: 1/1;
+			color: black;
+			word-break: break-all;
+		}
+
+		.block:hover {
+			color: white;
+		}
+
+		@media (orientation: landscape) {
+			#map {
+				width: calc(100vh - 15rem);
+			}
+		}
+
+		@media (orientation: portrait) {
+			#map {
+				width: 90vw;
+			}
+		}
+
+		form {
+			text-align: left;
+			display: inline-block;
+			margin: 1rem;
+		}
+
+		#msgBox {
+			color: orange;
+			background: black;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<h1>Level builder</h1>
+		for dotcrawler
+	</header>
+
+	<main>
+		<!-- Tools -->
+		<form>
+			<label for="grid">Select grid:</label>
+			<input name="grid" id="grid" type="number" value="10">
+			<label for="name">Map name:</label>
+			<input name="name" id="name" type="text" placeholder="Unnamed">
+			<br>
+			<label for="tool">Select block to place:</label>
+			<select name="tool" id="tool">
+				<option value="air">Air</option>
+				<option value="wall">Wall</option>
+				<option value="door">Door</option>
+				<option value="exit">Exit</option>
+				<option value="spawn">Spawn</option>
+				<option value="enemy">Enemy</option>
+				<option value="chestOpen">Chest (open)</option>
+				<option value="chestClosed">Chest (closed)</option>
+			</select>
+			<button id="save" type="button">Save map</button>
+			<span id="msgBox"></span>
+		</form>
+		<!-- Draw map -->
+		<div id="map"></div>
+	</main>
+
+	<footer>
+		&copy; 2025 William Pettersson | <a href="https://github.com/AstronomyOverdrive/dotcrawler" target="_blank">GitHub</a>
+	</footer>
+
+	<script>
+		// Elements
+		const map = document.getElementById("map");
+		const tool = document.getElementById("tool");
+		const grid = document.getElementById("grid");
+		const name = document.getElementById("name");
+		const save = document.getElementById("save");
+		const msgBox = document.getElementById("msgBox");
+
+		// Define colors for different blocks
+		const colors = {
+			Wall: "darkgray",
+			Air: "lightskyblue",
+			Door: "chocolate",
+			Exit: "yellow",
+			Spawn: "forestgreen",
+			Enemy: "firebrick",
+			ChestOpen: "burlywood",
+			ChestClosed: "bisque"
+		}
+
+		// Map information
+		let gridSize = 0;
+		let spawn = 0;
+
+		// Tool information
+		let placeBlock = "air";
+		let blockColor = colors.Air;
+
+		// Fill map with a base in whatever grid size is selected
+		function FillMap(size) {
+			gridSize = size;
+			// Empty out map element
+			map.innerHTML = "";
+			for (let i = 0; i < gridSize * gridSize; i++) {
+				// Check whether a wall or air should be placed
+				if (IsOuterPerimeter(i)) {
+					map.innerHTML += `<div class="block" id="${i}" style="height:${100 / gridSize}%; background:${colors.Wall};" onclick="UpdateBlock(${i})">wall</div>`;
+				} else {
+					map.innerHTML += `<div class="block" id="${i}" style="height:${100 / gridSize}%; background:${colors.Air};" onclick="UpdateBlock(${i})">air</div>`;
+				}
+			}
+		}
+
+		// Update specified block
+		function UpdateBlock(index) {
+			const block = document.getElementById(index);
+			// Only allow walls or exits on outer perimeter
+			if (!IsOuterPerimeter(index) || placeBlock == "wall" || placeBlock == "exit") {
+				block.innerText = placeBlock;
+				block.style.background = blockColor;
+			}
+		}
+
+		// Check if selected block is on outer perimeter
+		function IsOuterPerimeter(index) {
+			if (index % gridSize === 0 || (index + 1) % gridSize == 0 || index < gridSize || index > gridSize * gridSize - gridSize) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		// Update what tool is selected
+		function UpdateTool() {
+			placeBlock = tool.value;
+			switch (placeBlock) {
+				case "air":
+					blockColor = colors.Air;
+					break;
+				case "wall":
+					blockColor = colors.Wall;
+					break;
+				case "door":
+					blockColor = colors.Door;
+					break;
+				case "exit":
+					blockColor = colors.Exit;
+					break;
+				case "spawn":
+					blockColor = colors.Spawn;
+					break;
+				case "enemy":
+					blockColor = colors.Enemy;
+					break;
+				case "chestOpen":
+					blockColor = colors.ChestOpen;
+					break;
+				case "chestClosed":
+					blockColor = colors.ChestClosed;
+					break;
+				default:
+					break;
+			}
+		}
+
+		// Update grid size, if in range 4x4 - 20x20
+		function UpdateGrid() {
+			if (grid.value > 3 && grid.value < 21) {
+				FillMap(grid.value);
+			}
+		}
+
+		// Save map
+		async function SaveMap() {
+			// Clear message box
+			msgBox.innerText = "";
+			// Prepare object
+			const mapData = {
+				name: SanitizeName(name.value),
+				grid: Number(gridSize),
+				layout: GetLayout(),
+				spawn: spawn
+			}
+			// Check if spawn is valid
+			if (spawn !== -1) {
+				const mapString = JSON.stringify(mapData);
+				// Make request
+				try {
+					const response = await fetch(`http://127.0.0.1:8080/save/${mapString}`, {method: "POST"});
+					const responseData = await response;
+					if (response.status === 201) {
+						msgBox.innerText = "Map saved";
+					} else if (response.status === 401) {
+						msgBox.innerText = "Invalid request";
+					} else {
+						msgBox.innerText = "Save failed!";
+					}
+				} catch (error) {
+					console.error(error);
+				}
+			} else {
+				msgBox.innerText = "Spawn point is missing!";
+			}
+		}
+
+		// Remove any character that is not in the english alphabet, a number or a space
+		function SanitizeName(name) {
+			let mapName = name.replaceAll(/[^A-Za-z0-9 ]/g, "");
+			if (mapName === "") {
+				mapName = "Unnamed";
+			}
+			return mapName;
+		}
+
+		// Get array with layout from the map element
+		function GetLayout() {
+			spawn = -1;
+			let layoutArray = [];
+			// Each child of map represents a block
+			for (let i = 0; i < map.children.length; i++) {
+				const block = map.children[i].innerText;
+				// "spawn" is not an actual block but rather a position
+				if (block === "spawn") {
+					layoutArray.push("air");
+					spawn = i;
+				} else {
+					layoutArray.push(block);
+				}
+			}
+			return layoutArray;
+		}
+
+		// Default settings
+		FillMap(10)
+		tool.value = "air";
+		name.value = "";
+		grid.value = 10;
+
+		// Event listeners
+		tool.addEventListener("input", UpdateTool);
+		grid.addEventListener("input", UpdateGrid);
+		save.addEventListener("click", SaveMap);
+	</script>
+</body>
+
+</html>
