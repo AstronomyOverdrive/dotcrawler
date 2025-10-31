@@ -15,10 +15,11 @@ namespace dotcrawler
             Enemies enemies = new Enemies();
             SaveHandler saveHandler = new SaveHandler();
             Random dieRoll = new Random();
+            int startGold = saveHandler.LoadGold();
             view.ShowResize();
             map.SetMap((int)loadMap.grid, loadMap.layout);
             player.SetPos((int)loadMap.spawn, map);
-            player.SetGold(saveHandler.LoadGold());
+            player.SetGold(startGold);
             enemies.AttachAI(map);
 
             // Main game loop
@@ -76,7 +77,7 @@ namespace dotcrawler
                 }
                 else if (option == "Q")
                 {
-                    player.SetGold(saveHandler.GetBest());
+                    player.SetGold(startGold); // Remove any earned gold from player
                     quit = true;
                 }
                 // Let enemies have their turn
