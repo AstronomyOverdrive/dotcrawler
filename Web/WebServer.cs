@@ -8,8 +8,8 @@ namespace dotcrawler
         // IP and port to run the server on
         private string IPPort = "http://127.0.0.1:8080";
         // For saving maps
-        List<MapInfo> maps = [];
-        string jsonFile = @"StoredData/maps.json";
+        private List<MapInfo> maps = [];
+        private string jsonFile = @"StoredData/maps.json";
 
         // Start webserver
         public void Start()

@@ -14,8 +14,6 @@ namespace dotcrawler
 {
     class Program
     {
-        static bool exitGame = false; // Used for game loop
-
         // Main function
         static void Main(string[] args)
         {
