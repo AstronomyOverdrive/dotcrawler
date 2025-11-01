@@ -35,16 +35,24 @@ namespace dotcrawler
                 }
                 else
                 {
-                    // Load currently saved maps
-                    string readJSON = File.ReadAllText(jsonFile);
-                    maps = JsonSerializer.Deserialize<List<MapInfo>>(readJSON)!;
-                    // Get new map from client
-                    MapInfo newMap = JsonSerializer.Deserialize<MapInfo>(data)!;
-                    // Add new map to existing maps and save
-                    maps.Add(newMap);
-                    String writeJSON = JsonSerializer.Serialize(maps);
-                    File.WriteAllText(jsonFile, writeJSON);
-                    return Results.StatusCode(201);
+                    try
+                    {
+                        // Load currently saved maps
+                        string readJSON = File.ReadAllText(jsonFile);
+                        maps = JsonSerializer.Deserialize<List<MapInfo>>(readJSON)!;
+                        // Get new map from client
+                        MapInfo newMap = JsonSerializer.Deserialize<MapInfo>(data)!;
+                        // Add new map to existing maps and save
+                        maps.Add(newMap);
+                        String writeJSON = JsonSerializer.Serialize(maps);
+                        File.WriteAllText(jsonFile, writeJSON);
+                        return Results.StatusCode(201);
+                    }
+                    catch (System.Exception)
+                    {
+                        Console.WriteLine("Something went wrong handling client data");
+                        return Results.StatusCode(400);
+                    }
                 }
             });
             // Start app

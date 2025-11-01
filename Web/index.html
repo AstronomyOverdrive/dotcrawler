@@ -254,7 +254,7 @@
 					const responseData = await response;
 					if (response.status === 201) {
 						msgBox.innerText = "Map saved";
-					} else if (response.status === 401) {
+					} else if (response.status === 400) {
 						msgBox.innerText = "Invalid request";
 					} else {
 						msgBox.innerText = "Save failed!";
